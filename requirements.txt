@@ -1,6 +1,6 @@
-beautifulsoup4=='4.5.1'
-requests=='2.12.14'
-sklearn=='0.18.2'
-scipy=='0.19.1'
-stop_words=='2015.2.23.1'
-flask=='0.11.1'
+beautifulsoup4==4.5.1
+requests==2.12.14
+sklearn==0.18.2
+scipy==0.19.1
+stop_words==2015.2.23.1
+flask==0.11.1
