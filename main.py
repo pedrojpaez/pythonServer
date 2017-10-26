@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sre
 import requests
 
@@ -151,10 +150,10 @@ centroids_dict={}
 cluster_dict={}
 for i in range(6):
     centroids=[]
-    print("Cluster %d:" % i, end='')
+    print("Cluster %d:" % i)
     for ind in order_centroids[i, :10]:
         centroids.append(terms[ind])
-        print(' %s' % terms[ind], end='')
+        print(' %s' % terms[ind])
         print()
     cluster_dict[i]=centroids
 centroids_dict["clusters"]=cluster_dict
@@ -169,7 +168,7 @@ from flask import Flask
 
 
 app = Flask(__name__)
-
+port = int(os.getenv('VCAP_APP_PORT'))
 
 @app.route('/')
 def hello():
@@ -189,4 +188,4 @@ def server_error(e):
 if __name__ == '__main__':
     # This is used when running locally. Gunicorn is used to run the
     # application on Google App Engine. See entrypoint in app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='0.0.0.1', port=port)
