@@ -1,12 +1,5 @@
-sre
-urllib2
-sys
-beautifulsoup4
-BaseHTTPServer
-requests
 sklearn
-scipy
-stop_words
-time
-json
-flask==0.11.1
+beautifulsoup4
+requests
+
+
