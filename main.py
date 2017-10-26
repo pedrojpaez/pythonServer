@@ -164,19 +164,30 @@ centroids_dict["clusters"]=cluster_dict
 import json
 res=json.dumps(centroids_dict, ensure_ascii=False)
 
-from flask import Flask, request
-from flask_restful import Resource, Api
-from json import dumps
+import logging
 
+from flask import Flask
 
 
 app = Flask(__name__)
-api = Api(app)
 
-class Centroids(Resource):
-    def get(self):
-        return res
 
-    
-api.add_resource(Centroids, '/cents')
-app.run()
+@app.route('/')
+def hello():
+    """Return a friendly HTTP greeting."""
+    return res
+
+
+@app.errorhandler(500)
+def server_error(e):
+    logging.exception('An error occurred during a request.')
+    return """
+    An internal error occurred: <pre>{}</pre>
+    See logs for full stacktrace.
+    """.format(e), 500
+
+
+if __name__ == '__main__':
+    # This is used when running locally. Gunicorn is used to run the
+    # application on Google App Engine. See entrypoint in app.yaml.
+    app.run(host='127.0.0.1', port=8011, debug=True)
