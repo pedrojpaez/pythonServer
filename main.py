@@ -1,6 +1,5 @@
 from __future__ import print_function
-
-import sre, urllib2, sys, BaseHTTPServer
+import sre
 import requests
 
 
