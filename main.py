@@ -112,7 +112,7 @@ stop_words.append("u'said")
 stop_words.append("will")
 
 
-vectorizer = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = 0.1, stop_words = stop_words)
+vectorizer = TfidfVectorizer(analyzer='word', ngram_range=(1,3),max_df=0.95, min_df = 0.1, stop_words = stop_words)
 X = vectorizer.fit_transform(corpus_text)
 
 from sklearn.cluster import KMeans
@@ -128,7 +128,7 @@ for i in xrange(15):
 from time import time
 
 
-km = KMeans(n_clusters=6, init='k-means++', max_iter=100, n_init=1,verbose=1)
+km = KMeans(n_clusters=9, init='k-means++', max_iter=100, n_init=1,verbose=1)
 
 print("Clustering sparse data with %s" % km)
 t0 = time()
@@ -148,7 +148,7 @@ terms = vectorizer.get_feature_names()
 centroids_dict={}
 
 cluster_dict={}
-for i in range(6):
+for i in range(9):
     centroids=[]
     print("Cluster %d:" % i)
     for ind in order_centroids[i, :10]:
@@ -157,6 +157,42 @@ for i in range(6):
         print()
     cluster_dict[i]=centroids
 centroids_dict["clusters"]=cluster_dict
+
+
+from sklearn.decomposition import NMF
+
+n_samples = 2000
+n_features = 1000
+n_topics = 9
+n_top_words = 20
+
+
+def print_top_words(model, feature_names, n_top_words):
+    topics_dict={}
+    for topic_idx, topic in enumerate(model.components_):
+        topics=[]
+        print("Topic #%d:" % topic_idx)
+        topics =[feature_names[i] for i in topic.argsort()[:-n_top_words - 1:-1]]
+        print(" ".join(topics))
+        topics_dict[topic_idx]=topics
+    print()
+    return topics_dict
+
+
+
+
+# Fit the NMF model
+print("Fitting the NMF model with tf-idf features,"
+      "n_samples=%d and n_features=%d..."
+      % (n_samples, n_features))
+
+nmf = NMF(n_components=n_topics, random_state=1, alpha=.1, l1_ratio=.5).fit(X)
+
+
+print("\nTopics in NMF model:")
+tfidf_feature_names = vectorizer.get_feature_names()
+topics_dict=print_top_words(nmf, tfidf_feature_names, n_top_words)
+centroids_dict["topics"]=topics_dict
 
 
 import json
