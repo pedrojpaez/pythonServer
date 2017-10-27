@@ -2,4 +2,8 @@ sklearn
 beautifulsoup4
 requests
 stop_words
+numpy
+scipy
+flask
+logging
 

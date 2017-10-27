@@ -1,9 +1,10 @@
 applications:
 - path: .
-  memory: 128M
+  memory: 1536M
   instances: 1
   domain: eu-de.mybluemix.net
   name: pyServer
   host: pyServer
   disk_quota: 1024M
   buildpack: python_buildpack
+

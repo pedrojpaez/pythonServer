@@ -164,16 +164,18 @@ res=json.dumps(centroids_dict, ensure_ascii=False)
 
 import logging
 
-from flask import Flask
-
+from flask import Flask, Response
+import os
 
 app = Flask(__name__)
-port = int(os.getenv('VCAP_APP_PORT'))
+port = int(os.getenv('PORT', 8000))
 
 @app.route('/')
 def hello():
+    resp = Response(res)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
     """Return a friendly HTTP greeting."""
-    return res
+    return resp
 
 
 @app.errorhandler(500)
@@ -185,7 +187,5 @@ def server_error(e):
     """.format(e), 500
 
 
-if __name__ == '__main__':
-    # This is used when running locally. Gunicorn is used to run the
-    # application on Google App Engine. See entrypoint in app.yaml.
-    app.run(host='0.0.0.1', port=port)
+
+app.run(host='0.0.0.0', port=port, debug=True)
